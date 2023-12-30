@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="55c48ecd-7298-4660-a146-f899959b5246" name="HMS O2">
+        <fileTransfer accessType="SFTP" host="transfer.rc.hms.harvard.edu" port="22" sshConfigId="c7c43339-f737-4cf7-a249-f44cffc4fc2e" sshConfig="cw294@transfer.rc.hms.harvard.edu:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
