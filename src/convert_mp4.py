@@ -36,6 +36,8 @@ def extract_slice(dicom_data, time_frame, slice_index):
         # 3D data: format (x, y, z), assuming no time dimension
         # Ignore the time_frame parameter
         return dicom_data.pixel_array
+    elif num_dimensions == 2:
+        return dicom_data.pixel_array
     else:
         # Handle unexpected data dimensions
         raise ValueError("Unsupported DICOM data dimensions: {}".format(num_dimensions))
@@ -62,7 +64,8 @@ def convert_to_png(slice_data, output_file):
 
 
 def process_slice(slice_data):
-    """ Process the slice for video frame, assuming RGB data """
+    """ Process the slice for video frame, setting as RGB """
+    # checking color format
     # Initialize an empty array with the same shape as the input, but with float type
     normalized_slice = np.zeros_like(slice_data, dtype=np.float32)
 
@@ -91,12 +94,16 @@ def create_mp4_from_slices(dicom_data, output_video_path, fps=15):
         img = extract_slice(dicom_data, 0, slice_index)
         if color_form == 'YBR_FULL_422':
             img = convert_color_space(img, 'YBR_FULL_422', 'RGB')
+        elif color_form == 'MONOCHROME2':
+            img = np.stack((img,) * 3, axis=-1)
         output_img_path = os.path.splitext(output_video_path)[0] + '.png'
         convert_to_png(img, output_img_path)
     else:
         img = extract_slice(dicom_data, 0, slice_index)
         if color_form == 'YBR_FULL_422':
             img = convert_color_space(img, 'YBR_FULL_422', 'RGB')
+        elif color_form == 'MONOCHROME2':
+            img = np.stack((img,) * 3, axis=-1)
         # Initialize video writer
         first_frame = process_slice(img)
         height, width, channels = first_frame.shape
